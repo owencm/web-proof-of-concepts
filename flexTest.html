@@ -1,0 +1,45 @@
+<!doctype>
+<html>
+<head>
+	<style type='text/css'>
+		html, body {
+			padding: 0;
+			margin: 0;
+			overflow: hidden;
+		}
+		header {
+			background-color: #0af;
+			padding: 20px;
+		}
+		#messageContainer {
+			height: 100%;
+			overflow-y: scroll;
+			display: flex;
+			flex-direction: column;
+			flex-wrap: nowrap;
+			/* Removing justify-content allows the contents to scroll */
+			justify-content: flex-end;
+		}
+		.message {
+			flex: none;
+			margin: 20px 20px 0px 20px;
+			padding: 20px;
+			background-color: #09d;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div>Messaging</div>
+	</header>
+	<div id='messageContainer'>
+		<div class='message'>This is a message</div>
+		<div class='message'>This is a message</div>
+		<div class='message'>This is a message</div>
+		<div class='message'>This is a message</div>
+		<div class='message'>This is a message</div>
+		<div class='message'>This is a message</div>
+		<div class='message'>This is a message</div>
+	</div>
+</body>
+</html>

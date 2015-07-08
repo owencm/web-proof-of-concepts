@@ -1,0 +1,96 @@
+<!doctype>
+<html>
+<head>
+	<style type='text/css'>
+		* {
+			box-sizing: border-box;
+		}
+		html, body {
+			padding: 0;
+			margin: 0;
+			font-family: sans-serif;
+			color: white;
+			overflow: hidden;
+		}
+		header {
+			background-color: #0af;
+			padding: 20px;
+		}
+		#messageContainer {
+			overflow-y: scroll;
+			display: flex;
+			flex-direction: column;
+			flex-wrap: nowrap;
+			justify-content: flex-end;
+		}
+		.message {
+			flex: none;
+			margin: 20px 20px 0px 20px;
+			padding: 20px;
+			background-color: #09d;
+		}
+		#inputContainer {
+			margin: 20px;
+		}
+		input {
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div>Messaging</div>
+	</header>
+	<div id='messageContainer'>
+		<div class='message'>
+			This is your message.
+		</div>
+		<div class='message'>
+			This is your message.
+		</div>
+		<div class='message'>
+			This is your message.
+		</div>
+		<div class='message'>
+			This is your message.
+		</div>
+		<div class='message'>
+			This is your message.
+		</div>
+		<div class='message'>
+			This is your message.
+		</div>
+	</div>
+	<div id='inputContainer'>
+		<input type='text'></input>
+	</div>
+	<script type='text/javascript'>
+		var refit = (function () {
+			var refitting = false;
+			var refitForReals = function () {
+				console.log('refitting');
+				var inputContainer = document.querySelector('#inputContainer');
+				var styles = window.getComputedStyle(inputContainer);
+				var inputContainerMargin = parseFloat(styles['marginTop']) +
+												parseFloat(styles['marginBottom']);
+				var inputContainerHeight = inputContainer.offsetHeight + inputContainerMargin;
+				var windowHeight = window.innerHeight;
+				var container = document.querySelector('#messageContainer');
+				var containerTop = container.offsetTop;
+				messageContainer.style.height = windowHeight - containerTop - inputContainerHeight;
+			}
+			return function () {
+				if (!refitting) {
+					refitting = true;
+					refitForReals();
+					setTimeout(function () {
+						refitting = false;
+					}, 100);
+				}
+			}
+		})();
+		window.addEventListener('resize', refit);
+		refit();
+	</script>
+</body>
+</html>

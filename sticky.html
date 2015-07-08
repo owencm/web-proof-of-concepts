@@ -1,0 +1,118 @@
+<!doctype>
+<html>
+<head>
+	<style type='text/css'>
+		* {
+			box-sizing: border-box;
+		}
+		html, body {
+			padding: 0;
+			margin: 0;
+			font-family: sans-serif;
+		}
+		header {
+			margin: 0;
+			padding: 20px;
+			width: 100%;
+		}
+		header#one {
+			color: white;
+			background-color: #04a;
+		}
+		header#two {
+			background-color: #0af;
+			position: static;
+		}
+		#contents {
+			height: 4000px;
+			padding: 20px;
+		}
+	</style>
+</head>
+<body>
+	<header id='one'>
+		<div id='title'>Title</div>
+	</header>
+	<header id='two'>
+		<div id='title'>Title</div>
+	</header>
+	<div id='contents'>
+		Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />Hello there.<br />
+	</div>
+	<script type='text/javascript'>
+		var headerOne = document.querySelector('#one');
+		var headerTwo = document.querySelector('#two');
+		var headerTwoHeight = headerTwo.offsetHeight;
+		var threshold = headerOne.scrollTop + headerOne.scrollHeight;
+		var sticky = false;
+		var refreshStickyHeader = function () {
+			if (sticky == false && window.pageYOffset >= threshold) {
+				sticky = true;
+				headerTwo.style.position = 'fixed';
+				headerTwo.style.top = 0;
+			} else if (sticky == true && window.pageYOffset < threshold) {
+				sticky = false;
+				headerTwo.style.position = 'static';
+				headerTwo.style.top = '';
+			}
+		};
+
+		var breakpointManager = (function () {
+			var points = [];
+			var lastScroll = 0;
+			var timeUntilNextEvent = 10;
+			// This times the next onScroll event for an appropriate time
+			var nearby = false;
+			var onScroll = function () {
+				console.log('listening!');
+				var wasNearby = nearby;
+				nearby = false;
+				var currentScroll = window.pageYOffset;
+				var velocity = (((currentScroll - lastScroll)/timeUntilNextEvent*10)>>0);
+				var doubleVelocity = 2 * velocity;
+				for (var i = 0; i < points.length; i++) {
+					var point = points[i];
+					var distance = point.position - currentScroll;
+					if (point.abovePosition) {
+						if (distance < 0) {
+							point.callback();
+							point.abovePosition = false;
+						} else if (distance < 10 * doubleVelocity || distance < 100) {
+							nearby = true;
+						}
+					} else if (!point.abovePosition) {
+						if (distance > 0) {
+							point.callback();
+							point.abovePosition = true;
+						} else if (distance > 10 * doubleVelocity || distance > 100) {
+							nearby = true;
+						}
+					}
+				}
+				timeUntilNextEvent = 10;
+				if (!nearby) {
+					document.removeEventListener('scroll', onScroll);
+					setTimeout(function () {
+						document.addEventListener('scroll', onScroll);
+					}, 100);
+					timeUntilNextEvent = 100;
+				}
+				lastScroll = currentScroll;
+			}
+			var callAtPoint = function (position, callback) {
+				var currentScroll = window.pageYOffset;
+				var abovePosition = currentScroll < position;
+				points.push({position: position, abovePosition: abovePosition, callback: callback});
+				onScroll();
+			};
+			var init = function () {
+				document.addEventListener('scroll', onScroll);
+			}
+			init();
+			return {callAtPoint: callAtPoint};
+		})();
+		breakpointManager.callAtPoint(58, refreshStickyHeader);
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype>
+<html>
+<head>
+	<style type='text/css'>
+		* {
+			box-sizing: border-box;
+		}
+		html, body {
+			padding: 0;
+			margin: 0;
+			font-family: sans-serif;
+		}
+		header {
+			position: absolute;
+			background-color: #0af;
+			padding: 1.5em;
+			color: white;
+			width: 100%;
+			height: 4.2em;
+		}
+		#headerPlaceholder {
+			height: 3em;
+		}
+		#content {
+			padding: 20px;
+		}
+		#content p {
+			padding-bottom: 50px;
+		}
+	</style>
+</head>
+<body>
+	<header id='header'>
+		<div>Menu</div>
+	</header>
+	<div id='headerPlaceholder'></div>
+	<div id='content'>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+		<p>Hello</p>
+	</div>
+	<script type='text/javascript'>
+		var header = document.querySelector('#header');
+		var headerHeight = header.offsetHeight;
+		var previousScrollPosition = 0;
+		var wasScrollingDown = false;
+		var headerPosition = 0;
+		document.addEventListener('scroll', function () {
+			var scrollPosition = window.scrollY;
+			var scrollingDown = scrollPosition > previousScrollPosition;
+			if (scrollingDown) {
+				if (wasScrollingDown == false) {
+					wasScrollingDown = true;
+					if (headerPosition + headerHeight < scrollPosition || scrollPosition <  headerHeight) {
+						header.style.position = 'absolute';
+						headerPosition = scrollPosition;
+						header.style.top = headerPosition;
+					}
+				}
+			} else {
+				if (wasScrollingDown) {
+					wasScrollingDown = false;
+					if (headerPosition + headerHeight < scrollPosition) {
+						headerPosition = scrollPosition - headerHeight;
+						header.style.top = headerPosition + 'px';
+					}
+				}
+				if (scrollPosition - headerPosition <= 0) {
+					header.style.position = 'fixed';
+					headerPosition = 0;
+					header.style.top = headerPosition + 'px';
+				}
+			}
+			previousScrollPosition = scrollPosition;
+		});
+	</script>
+</body>
+</html>
